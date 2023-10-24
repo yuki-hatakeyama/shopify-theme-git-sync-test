@@ -1,0 +1,112 @@
+<section>
+  <h1>{{ section.settings.titleTextSample }}</h1>
+  <h2>{{ section.settings.ltitleLeadTextSample }}</h2>
+
+  {% for block in section.blocks %}
+    <p>{{ block.settings.textSample }}</p>
+    <p>{{ block.settings.richtextSample }}</p>
+    <p>{{ block.settings.segmentedControlSample }}</p>
+    <p>{{ block.settings.selectSample }}</p>
+  {% endfor %}
+</section>
+
+{% schema %}
+{
+  "name": "自作のカスタムセクションのサンプルA",
+  "settings": [
+    {
+      "type": "text",
+      "id": "titleTextSample",
+      "label": "タイトルを入力ください",
+      "default": "タイトル"
+    },
+    {
+      "type": "text",
+      "id": "ltitleLeadTextSample",
+      "label": "リード文を入力ください",
+      "default": "リード文"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "sectionSample",
+      "name": "ブロック",
+      "settings": [
+        {
+          "type": "text",
+          "id": "textSample",
+          "label": "テキストを入力してください",
+          "default": "デフォルトのテキスト"
+        },
+        {
+          "type": "textarea",
+          "id": "textareaSample",
+          "label": "テキストエリアに入力してください",
+          "default": "デフォルトのテキスト"
+        },
+        {
+          "type": "richtext",
+          "id": "richtextSample",
+          "label": "リッチテキストを入力してください",
+          "default": "<p>デフォルトのテキスト</p>"
+        },
+        {
+          "type": "select",
+          "id": "segmentedControlSample",
+          "label": "セグメントコントロールから選択してください",
+          "options": [
+            {
+              "value": "optionA",
+              "label": "A"
+            },
+            {
+              "value": "optionB",
+              "label": "B"
+            },
+            {
+              "value": "optionC",
+              "label": "C"
+            },
+            {
+              "value": "optionD",
+              "label": "D"
+            },
+            {
+              "value": "optionE",
+              "label": "E"
+            }
+          ]
+        },
+        {
+          "type": "select",
+          "id": "selectSample",
+          "label": "セレクトボックスから選択してください",
+          "options": [
+            { "value": "optionA", "label": "オプション A" },
+            { "value": "optionB", "label": "オプション B" },
+            { "value": "optionC", "label": "オプション C" }
+          ],
+          "default": "optionB"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "自作のカスタムセクションのサンプルB",
+      "blocks": [
+        {
+          "type": "sectionSample",
+          "settings": {
+            "textSample": "デフォルトの質問",
+            "textareaSample": "デフォルトの質問",
+            "richtextSample": "<p>デフォルトのコンテンツ</p>",
+            "segmentedControlSample": "<p>デフォルトのコンテンツ</p>",
+            "selectSample": "<p>デフォルトのコンテンツ</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
