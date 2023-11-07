@@ -502,7 +502,6 @@
 <script>
   window.addEventListener('DOMContentLoaded', async () => {
     try {
-      // サーバーサイドでAPIを呼び出す例
       const shippingZonesRates = await fetch(
         'https://hatake-test2.myshopify.com/admin/api/2023-07/shipping_zones.json',
         {
@@ -512,10 +511,9 @@
         }
       )
         .then((response) => response.json())
-        .then((shippingZones) => {
-          console.log('shippingZones');
-          console.log(shippingZones);
-        });
+
+       console.log('shippingZonesRates');
+       console.log(shippingZonesRates);
 
       const cart = await fetch('/cart.js').then((response) => {
         //
