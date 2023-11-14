@@ -40,7 +40,7 @@
     "9dfd746c-86e9-451c-ba56-18dec36a6333": {
       "type": "custom-liquid",
       "settings": {
-        "custom_liquid": "<div class=\"blog-article-custom-field\">\n    {{ acustom.external_link}}\n  <\/div>",
+        "custom_liquid": "<div>\n    {{ acustom.external_link}}\n  <\/div>",
         "color_scheme": "",
         "padding_top": 40,
         "padding_bottom": 52
