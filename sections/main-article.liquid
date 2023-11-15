@@ -325,9 +325,13 @@
   }
 </script>
 
-<script>
-  console.log(external_link)
-</script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('articleProductsId1', external_link);
+      console.log('articleProductsId2', {{external_link}});
+
+    });
+  </script>
 
 {% schema %}
 {
