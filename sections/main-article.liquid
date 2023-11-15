@@ -66,6 +66,9 @@
     33;
     {{ article.metafields.custom.internal_link }}
   </div>
+      {% assign external_link = article.metafields.custom.external_link %}
+<p>{{external_link}}</p>
+          
           
           {%- if block.settings.blog_show_date -%}
             <span class="circle-divider caption-with-letter-spacing" itemprop="dateCreated pubdate datePublished">
@@ -320,6 +323,10 @@
       "name": {{ shop.name | json }}
     }
   }
+</script>
+
+<script>
+  console.log(external_link)
 </script>
 
 {% schema %}
