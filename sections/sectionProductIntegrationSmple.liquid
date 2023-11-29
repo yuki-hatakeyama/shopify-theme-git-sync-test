@@ -1,0 +1,40 @@
+<section>
+  <h1>商品名：{{ product.title }}</h1>
+  <p>商品説明：{{ product.description }}</p>
+  <p>価格：{{ product.price | money }}</p>
+  <p>在庫の有無：{{ product.available }}</p>
+  <p>
+    残り在庫：
+    {% if product.variants.first.inventory_management == 'shopify' and product.variants.first.inventory_quantity > 0 %}
+      {{ product.variants.first.inventory_quantity }} 個
+    {% else %}
+      Sold Out
+    {% endif %}
+  </p>
+
+  <hr>
+
+  <form method="post" action="/cart/add">
+    <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+    <input
+      min="0"
+      max="{{ product.variants.first.inventory_quantity }}"
+      value="1"
+      type="number"
+    >
+    <input type="submit" value="Add to cart" class="btn">
+  </form>
+
+  <hr>
+</section>
+
+{% schema %}
+{
+  "name": "商品連携のカスタムセクションのサンプルA",
+  "presets": [
+    {
+      "name": "商品連携のカスタムセクションのサンプルB"
+    }
+  ]
+}
+{% endschema %}

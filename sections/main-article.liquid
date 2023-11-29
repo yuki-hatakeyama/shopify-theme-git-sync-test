@@ -53,6 +53,23 @@
           >
             {{ article.title | escape }}
           </h1>
+
+          <div>
+    11;
+    {{ article.metafields.custom.article_products }}
+  </div>
+  <div>
+    22;
+    {{ article.metafields.custom.external_link }}
+  </div>
+  <div>
+    33;
+    {{ article.metafields.custom.internal_link }}
+  </div>
+      {% assign external_link = article.metafields.custom.external_link %}
+<p>{{external_link}}</p>
+          
+          
           {%- if block.settings.blog_show_date -%}
             <span class="circle-divider caption-with-letter-spacing" itemprop="dateCreated pubdate datePublished">
               {{- article.published_at | time_tag: format: 'date' -}}
@@ -307,6 +324,13 @@
     }
   }
 </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('articleProductsId2', {{external_link}});
+
+    });
+  </script>
 
 {% schema %}
 {
