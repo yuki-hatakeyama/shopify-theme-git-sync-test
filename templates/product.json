@@ -3,22 +3,11 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "b7c65742-29b1-4c71-bdf4-0d23af244af4": {
-          "type": "shopify:\/\/apps\/wishlist-king\/blocks\/wishlist-button-block\/194f5011-a43c-4b22-b12e-eaf20dc4506a",
+        "a13ce95f-151e-455a-b159-1c8f86ab08a8": {
+          "type": "shopify:\/\/apps\/\/blocks\/app-block\/67cce3d8-a1e5-43f3-8d2d-0c320d8c46e7",
           "settings": {
-            "button_style": "plain_accent_1",
-            "button_alignment": "center",
-            "button_content_alignment": "center",
-            "button_margin_top": 0,
-            "button_margin_bottom": 0,
-            "button_max_width": 0,
-            "button_padding_horizontal": 15,
-            "button_full_width": true,
-            "button_show_text": true,
-            "button_show_icon": true,
-            "icon_size": 18,
-            "icon_stroke_width": 1.2,
-            "icon_offset_vertical": 0
+            "onetime_purchase_label": "１回決済",
+            "subscription_label": "定期決済"
           }
         },
         "vendor": {
@@ -66,10 +55,24 @@
           "settings": {
             "share_label": "Share"
           }
+        },
+        "6eaacd1c-1739-485c-be03-002c61cecf9f": {
+          "type": "shopify:\/\/apps\/\/blocks\/app-block-v2\/67cce3d8-a1e5-43f3-8d2d-0c320d8c46e7",
+          "settings": {
+            "subscription_label": "お得定期便",
+            "subscription_message": "毎月送料無料！",
+            "onetime_purchase_label": "通常配送",
+            "onetime_purchase_message": "1回限り",
+            "selected_main_color": "#000000",
+            "selected_sub_color": "#535353",
+            "selected_frame_color": "#000000",
+            "selected_background_color": "#ffffff",
+            "selected_border_size": 2
+          }
         }
       },
       "block_order": [
-        "b7c65742-29b1-4c71-bdf4-0d23af244af4",
+        "a13ce95f-151e-455a-b159-1c8f86ab08a8",
         "vendor",
         "title",
         "price",
@@ -77,7 +80,8 @@
         "quantity_selector",
         "buy_buttons",
         "description",
-        "share"
+        "share",
+        "6eaacd1c-1739-485c-be03-002c61cecf9f"
       ],
       "settings": {
         "enable_sticky_info": true,
