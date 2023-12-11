@@ -90,7 +90,16 @@
             {%- when 'title' -%}
               <div class="product__title" {{ block.shopify_attributes }}>
                 <h1>{{ product.title | escape }}</h1>
-                {% render 'wishlist-button', product_handle: card_product.handle, floating: true %}
+                <button
+                  class="swym-button swym-add-to-wishlist"
+                  data-with-epi="true"
+                  data-swaction="addToWishlist"
+                  data-product-id="{{ product.id }}"
+                  data-variant-id="{{ product.variants[0].id }}"
+                  data-product-url="{{ shop.url }}{{ product.url }}"
+                >
+                  add wishlist
+                </button>
                 <a href="{{ product.url }}" class="product__title">
                   <h2 class="h1">
                     {{ product.title | escape }}
