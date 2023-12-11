@@ -1,0 +1,445 @@
+{%- assign share_url = shop.url | append: article.url -%}
+{%- assign twitter_text = article.title -%}
+{%- assign pinterest_description = article.description | strip_html | truncatewords: 15 | url_param_escape -%}
+{%- assign pinterest_image = article.image | img_url: '750x' | prepend: 'https:' -%}
+
+<article class="Article" data-section-id="{{ section.id }}" data-section-type="article">
+  <aside class="ArticleToolbar hidden-phone">
+    <div class="ArticleToolbar__Left">
+      <span class="Heading Text--subdued u-h8 hidden-tablet">{{ 'blog.article.now_reading' | t }}</span>
+      <span class="ArticleToolbar__ArticleTitle Heading u-h7">{{ article.title }}</span>
+    </div>
+
+    <div class="ArticleToolbar__Right">
+      {%- if section.settings.show_share_buttons -%}
+        <div class="ArticleToolbar__ShareList">
+          <span class="ArticleToolbar__ShareLabel Heading Text--subdued u-h8">{{ 'blog.article.share' | t }}</span>
+
+          <div class="HorizontalList">
+            <a
+              class="HorizontalList__Item Text--subdued Link"
+              href="https://www.facebook.com/sharer.php?u={{ share_url }}"
+              target="_blank"
+              rel="noopener"
+            >
+              {%- render 'icon' with 'facebook' -%}
+            </a>
+            <a
+              class="HorizontalList__Item Text--subdued Link"
+              href="https://twitter.com/share?{% if twitter_text != blank %}text={{twitter_text}}&{% endif %}url={{ share_url }}"
+              target="_blank"
+              rel="noopener"
+            >
+              {%- render 'icon' with 'twitter' -%}
+            </a>
+            <a
+              class="HorizontalList__Item Text--subdued Link"
+              href="https://pinterest.com/pin/create/button/?url={{ share_url }}{% if pinterest_image != blank %}&media={{ pinterest_image }}{% endif %}&description={{ pinterest_description }}"
+              target="_blank"
+              rel="noopener"
+            >
+              {%- render 'icon' with 'pinterest' -%}
+            </a>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- if blog.next_article or blog.previous_article -%}
+        <div class="ArticleToolbar__Nav">
+          {%- if blog.next_article -%}
+            <a
+              href="{{ blog.next_article }}"
+              class="ArticleToolbar__NavItem ArticleToolbar__NavItem--next Heading Text--subdued Link u-h8"
+            >
+              {%- render 'icon' with 'select-arrow-left' %}
+              {{ 'blog.article.previous' | t -}}
+            </a>
+          {%- endif -%}
+
+          {%- if blog.previous_article and blog.next_article -%}
+            <span class="ArticleToolbar__NavItemSeparator"></span>
+          {%- endif -%}
+
+          {%- if blog.previous_article -%}
+            <a
+              href="{{ blog.previous_article }}"
+              class="ArticleToolbar__NavItem ArticleToolbar__NavItem--prev Heading Text--subdued Link u-h8"
+            >
+              {{- 'blog.article.next' | t }}
+              {% render 'icon' with 'select-arrow-right' -%}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </aside>
+
+  <div class="Article__Wrapper">
+    <div class="Article__Content">
+      <header class="Article__Header">
+        {%- capture article_meta -%}
+          {%- if section.settings.show_date -%}
+            <span class="Article__MetaItem">{{ article.published_at | date: format: 'month_day_year' }}</span>
+          {%- endif -%}
+
+          {%- if section.settings.show_category and article.tags != empty -%}
+            <span class="Article__MetaItem">{{ article.tags.first }}</span>
+          {%- endif -%}
+        {%- endcapture -%}
+
+        {%- if article_meta != blank -%}
+          <div class="Article__Meta Heading Text--subdued u-h6">
+            {{- article_meta -}}
+          </div>
+        {%- endif -%}
+
+        <h1 class="Article__Title Heading u-h1">{{ article.title }}</h1>
+      </header>
+
+      {%- if article.image and section.settings.show_article_image -%}
+        <div class="Article__ImageWrapper" style="background-image: url({{ article.image | img_url: '1x1' }})">
+          <div
+            class="Article__Image Image--lazyLoad Image--fadeIn"
+            data-optimumx="1.4"
+            data-bgset="{{ article.image | img_url: '400x' }} 400w, {{ article.image | img_url: '600x' }} 600w, {{ article.image | img_url: '800x' }} 800w, {{ article.image | img_url: '1200x' }} 1200w, {{ article.image | img_url: '1400x' }} 1400w, {{ article.image | img_url: '1600x' }} 1600w"
+          ></div>
+        </div>
+      {%- endif -%}
+
+      <div class="Article__Body Rte">
+        {{ article.content }}
+      </div>
+
+      {%- capture article_footer -%}
+        {%- if section.settings.show_author -%}
+          <span class="Article__Author Heading Text--subdued u-h6">{{ 'blog.article.written_by' | t: author: article.author }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.show_share_buttons -%}
+          <div class="Article__ShareButtons ShareButtons">
+            <a class="ShareButtons__Item ShareButtons__Item--facebook" href="https://www.facebook.com/sharer.php?u={{ share_url }}" target="_blank" rel="noopener">{%- render 'icon' with 'facebook' -%}</a>
+            <a class="ShareButtons__Item ShareButtons__Item--twitter" href="https://twitter.com/share?{% if twitter_text != blank %}text={{twitter_text}}&{% endif %}url={{ share_url }}" target="_blank" rel="noopener">{%- render 'icon' with 'twitter' -%}</a>
+            <a class="ShareButtons__Item ShareButtons__Item--pinterest" href="https://pinterest.com/pin/create/button/?url={{ share_url }}{% if pinterest_image != blank %}&media={{ pinterest_image }}{% endif %}&description={{ pinterest_description }}" target="_blank" rel="noopener">{%- render 'icon' with 'pinterest' -%}</a>
+          </div>
+        {%- endif -%}
+      {%- endcapture -%}
+
+      {%- if article_footer != blank -%}
+        <footer class="Article__Footer">
+          {{ article_footer }}
+        </footer>
+      {%- endif -%}
+      {%- if blog.next_article or blog.previous_article -%}
+        <div class="ArticleToolbar__Nav">
+          {%- if blog.previous_article -%}
+            <a
+              href="{{ blog.previous_article }}"
+              class="ArticleToolbar__NavItem ArticleToolbar__NavItem--prev Heading Text--subdued Link u-h8"
+            >
+              {%- render 'icon' with 'select-arrow-left' %}
+              <div>{{ blog.previous_article.title }}</div>
+            </a>
+          {%- endif -%}
+
+          {%- if blog.previous_article and blog.next_article -%}
+            <span class="ArticleToolbar__NavItemSeparator"></span>
+          {%- endif -%}
+
+          {%- if blog.next_article -%}
+            <a
+              href="{{ blog.next_article }}"
+              class="ArticleToolbar__NavItem ArticleToolbar__NavItem--next Heading Text--subdued Link u-h8"
+            >
+              <div>{{ blog.next_article.title }}</div>
+              {% render 'icon' with 'select-arrow-right' -%}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <div class="ArticleBack">
+        <a class="ArticleBackWrapper" href="/blogs/news">
+          <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M16.5 9.00012C16.5 4.85799 13.1421 1.50013 9 1.50013C4.85786 1.50013 1.5 4.85799 1.5 9.00012C1.5 13.1423 4.85786 16.5001 9 16.5001C13.1421 16.5001 16.5 13.1423 16.5 9.00012Z" stroke="#F03C01" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M12.1808 8.99983L6.18635 8.99983" stroke="#F03C01" stroke-linecap="square" stroke-linejoin="round"/>
+            <path d="M7.875 11.0566L5.81802 8.99966L7.875 6.94268" stroke="#F03C01" stroke-linecap="square"/>
+          </svg>
+          <span>ニュース一覧へ戻る</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="Article__News">
+      <h3 class="Article__NewsHeading">その他のニュース</h3>
+      {% paginate blogs.news.articles by 5 %}
+        <!-- 表示する記事数を指定 -->
+        {% for article in blogs.news.articles %}
+          <a class="Article__NewsItem" href="{{ article.url }}">
+            <img class="Article__NewsItemImage" src="{{ article.image.src | img_url: 'master' }}" alt="">
+            <h3 class="Article__NewsItemTitle">{{ article.title }}</h3>
+          </a>
+        {% endfor %}
+      {% endpaginate %}
+      <div class="categories">
+        <div class="categories-title">
+          <p>Categories</p>
+          <span>カテゴリー</span>
+        </div>
+        <ul class="category-links">
+          <li class="category-links-item">
+            <a class="category-links-anchor" href="">お知らせ</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    {%- if blog.comments_enabled? -%}
+      {%- if article.comments_count > 0 -%}
+        <div class="Article__Comments">
+          <span class="Anchor" id="comments"></span>
+
+          <h2 class="Heading u-h1">{{ 'blog.article.comments_count' | t: count: article.comments_count }}</h2>
+
+          <div class="Article__CommentList">
+            {%- paginate article.comments by 25 -%}
+              {%- for comment in article.comments -%}
+                <div class="ArticleComment">
+                  <div class="ArticleComment__Body Rte">
+                    {{ comment.content }}
+                  </div>
+
+                  <div class="ArticleComment__Meta Heading Text--subdued u-h8">
+                    <span class="ArticleComment__Author">{{ comment.author }}</span>
+                    <span class="ArticleComment__Date">{{ comment.created_at | date: format: 'month_day_year' }}</span>
+                  </div>
+                </div>
+              {%- endfor -%}
+
+              {% render 'pagination', paginate: paginate, hash: '#comments' %}
+            {%- endpaginate -%}
+          </div>
+        </div>
+      {%- endif -%}
+
+      <div class="Article__CommentFormWrapper">
+        {% if article.comments_count == 0 %}
+          <span class="Anchor" id="comments"></span>
+        {%- endif -%}
+
+        <span class="Anchor" id="comment_form"></span>
+
+        <h2 class="Heading u-h1">{{ 'blog.comments.form_title' | t }}</h2>
+
+        {%- form 'new_comment', article, class: 'Article__CommentForm Form', id: '' -%}
+          {%- if form.posted_successfully? -%}
+            <p class="Form__Alert Alert Alert--success">
+              {%- if blog.moderated? -%}
+                {{- 'blog.comments.success_moderated' | t -}}
+              {%- else -%}
+                {{- 'blog.comments.success' | t -}}
+              {%- endif -%}
+            </p>
+          {%- endif -%}
+
+          {%- if form.errors -%}
+            <div class="Form__Alert Alert Alert--error">
+              <ul class="Alert__ErrorList">
+                {%- for field in form.errors -%}
+                  {%- if field == 'form' -%}
+                    <li class="Alert__ErrorItem">{{ form.errors.messages[field] }}</li>
+                  {%- else -%}
+                    <li class="Alert__ErrorItem">
+                      <strong>{{ form.errors.translated_fields[field] }}</strong> {{ form.errors.messages[field] }}
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          <div class="Form__Group">
+            <div class="Form__Item">
+              <input
+                type="text"
+                class="Form__Input"
+                name="comment[author]"
+                placeholder="{{ 'blog.comments.name_placeholder' | t }}"
+                aria-label="{{ 'blog.comments.name_placeholder' | t }}"
+                value="{{ form.author | escape | default: customer.name }}"
+                required="required"
+              >
+              <label class="Form__FloatingLabel">{{ 'blog.comments.name_placeholder' | t }}</label>
+            </div>
+
+            <div class="Form__Item">
+              <input
+                type="email"
+                class="Form__Input"
+                name="comment[email]"
+                placeholder="{{ 'blog.comments.email_placeholder' | t }}"
+                aria-label="{{ 'blog.comments.email_placeholder' | t }}"
+                value="{{ form.email | escape | default: customer.email }}"
+                required="required"
+              >
+              <label class="Form__FloatingLabel">{{ 'blog.comments.email_placeholder' | t }}</label>
+            </div>
+          </div>
+
+          <div class="Form__Item">
+            <textarea
+              name="comment[body]"
+              rows="6"
+              class="Form__Textarea"
+              placeholder="{{ 'blog.comments.comment_placeholder' | t }}"
+              aria-label="{{ 'blog.comments.comment_placeholder' | t }}"
+              required="required"
+            >
+              {{- form.body -}}
+            </textarea>
+
+            <label class="Form__FloatingLabel">{{ 'blog.comments.comment_placeholder' | t }}</label>
+          </div>
+
+          {%- if blog.moderated? -%}
+            <p class="Form__Hint">{{ 'blog.comments.approval_notice' | t }}</p>
+          {%- endif -%}
+
+          <button type="submit" class="Form__Submit Button Button--primary">{{ 'blog.comments.submit' | t }}</button>
+        {%- endform -%}
+      </div>
+    {%- endif -%}
+  </div>
+  <div class="ArticleBanner">
+    <a class="ArticleBannerWrapper" href="/collections/online-products">
+      <div class="ArticleBannerTitle">オンラインショップ</div>
+      <div class="ArticleBannerLinkWrapper">
+        <span class="ArticleBannerLinkText">2foodsの商品を探す</span>
+        <img class="ArticleBannerLinkIcon" src="{{ 'arrow-right-circle-white.svg' | asset_url }}" alt="リンク">
+      </div>
+      <img class="ArticleBannerBackImageSp" src="{{ 'onlineshop-banner-sp.png' | asset_url }}" alt="オンラインショップ">
+      <img class="ArticleBannerBackImagePc" src="{{ 'onlineshop-banner-pc.png' | asset_url }}" alt="オンラインショップ">
+    </a>
+  </div>
+  <div class="ArticleFollowWrapper">
+    <div class="ArticleFollow">
+      <div class="ArticleFollowTexts">
+        <h2 class="ArticleFollowTitle">Follow Us</h2>
+        <p class="ArticleFollowDesc">
+          公式LINEやニュースレターに登録すると、<br>
+          キャンペーンや新商品の情報などを<br>
+          いち早くお知らせします
+        </p>
+      </div>
+      <div class="ArticleFollowElements">
+        <div class="ArticleFollowIcons">
+          <a href="https://page.line.me/223jbbch" target="_blank">
+            <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M24.7922 15.8136C24.7922 12.0566 21.0258 9 16.396 9C11.7668 9 8 12.0566 8 15.8136C8 19.1817 10.987 22.0025 15.0218 22.5358C15.2952 22.5948 15.6674 22.7161 15.7615 22.9498C15.8461 23.162 15.8169 23.4946 15.7886 23.709C15.7886 23.709 15.6902 24.3014 15.6688 24.4278C15.6322 24.6399 15.5001 25.258 16.396 24.8804C17.2923 24.5028 21.2314 22.0332 22.9929 20.0057H22.9925C24.2093 18.6713 24.7922 17.3172 24.7922 15.8136Z" fill="#222222"/>
+              <path d="M14.69 13.9985H14.1011C14.0108 13.9985 13.9375 14.0717 13.9375 14.1618V17.8202C13.9375 17.9103 14.0108 17.9834 14.1011 17.9834H14.69C14.7803 17.9834 14.8536 17.9103 14.8536 17.8202V14.1618C14.8536 14.0717 14.7803 13.9985 14.69 13.9985Z" fill="white"/>
+              <path d="M18.7433 13.9985H18.1544C18.0641 13.9985 17.9909 14.0717 17.9909 14.1618V16.3353L16.3143 14.0712C16.3105 14.0653 16.3061 14.0599 16.3016 14.0546C16.3012 14.0542 16.3008 14.0538 16.3005 14.0535C16.2973 14.05 16.294 14.0466 16.2907 14.0435C16.2897 14.0425 16.2887 14.0416 16.2877 14.0407C16.2849 14.0382 16.282 14.0356 16.2789 14.0334C16.2776 14.0322 16.2761 14.0311 16.2747 14.0301C16.2719 14.0281 16.2691 14.0261 16.2662 14.0242C16.2646 14.0232 16.263 14.0223 16.2613 14.0213C16.2584 14.0196 16.2555 14.0179 16.2525 14.0164C16.2508 14.0156 16.2491 14.0147 16.2474 14.0139C16.2443 14.0126 16.2413 14.0111 16.238 14.0099C16.2361 14.0093 16.2345 14.0086 16.2327 14.0081C16.2295 14.0069 16.2263 14.0058 16.223 14.0049C16.2211 14.0044 16.2193 14.004 16.2173 14.0034C16.2141 14.0026 16.2111 14.002 16.2079 14.0013C16.2056 14.0009 16.2032 14.0007 16.201 14.0004C16.1982 13.9999 16.1953 13.9996 16.1924 13.9993C16.1896 13.9991 16.1868 13.9989 16.1839 13.9988C16.1819 13.9988 16.1802 13.9985 16.1782 13.9985H15.5893C15.4991 13.9985 15.4258 14.0717 15.4258 14.1618V17.8202C15.4258 17.9103 15.4991 17.9834 15.5893 17.9834H16.1782C16.2686 17.9834 16.3419 17.9103 16.3419 17.8202V15.6474L18.0204 17.9145C18.032 17.9308 18.0463 17.9441 18.0619 17.9547C18.0625 17.9551 18.0631 17.9555 18.0637 17.9561C18.067 17.9582 18.0703 17.9603 18.0737 17.9622C18.0753 17.9631 18.0768 17.9639 18.0784 17.9647C18.0809 17.966 18.0835 17.9673 18.0862 17.9685C18.0888 17.9696 18.0914 17.9708 18.0941 17.9718C18.0959 17.9725 18.0973 17.9732 18.099 17.9737C18.1029 17.975 18.1065 17.9762 18.1102 17.9773C18.111 17.9774 18.1118 17.9777 18.1126 17.9778C18.1258 17.9814 18.1399 17.9834 18.1544 17.9834H18.7433C18.8337 17.9834 18.9068 17.9103 18.9068 17.8202V14.1618C18.9068 14.0717 18.8337 13.9985 18.7433 13.9985" fill="white"/>
+              <path d="M13.2701 17.0674H11.6699V14.162C11.6699 14.0717 11.5967 13.9985 11.5064 13.9985H10.9175C10.8272 13.9985 10.7539 14.0717 10.7539 14.162V17.8202C10.7539 17.8641 10.7714 17.9038 10.7996 17.9331C10.8003 17.9339 10.801 17.9349 10.8019 17.9357C10.8027 17.9365 10.8035 17.9371 10.8043 17.9379C10.8337 17.9661 10.8733 17.9835 10.9172 17.9835H13.2701C13.3604 17.9835 13.4334 17.9102 13.4334 17.82V17.231C13.4334 17.1407 13.3604 17.0674 13.2701 17.0674" fill="white"/>
+              <path d="M21.9967 14.9146C22.0869 14.9146 22.16 14.8415 22.16 14.7511V14.1622C22.16 14.0718 22.0869 13.9985 21.9967 13.9985H19.6438C19.5996 13.9985 19.5599 14.0162 19.5303 14.0447C19.5298 14.0453 19.529 14.0458 19.5284 14.0464C19.5275 14.0474 19.5266 14.0484 19.5258 14.0493C19.4978 14.0786 19.4805 14.1182 19.4805 14.162V17.8202C19.4805 17.8641 19.498 17.9039 19.5262 17.9331C19.5269 17.9339 19.5277 17.9349 19.5284 17.9357C19.5291 17.9363 19.53 17.9371 19.5308 17.9378C19.5601 17.966 19.5999 17.9835 19.6438 17.9835H21.9967C22.0869 17.9835 22.16 17.9102 22.16 17.82V17.231C22.16 17.1407 22.0869 17.0674 21.9967 17.0674H20.3966V16.449H21.9967C22.0869 16.449 22.16 16.3758 22.16 16.2855V15.6966C22.16 15.6062 22.0869 15.5329 21.9967 15.5329H20.3966V14.9146H21.9967L21.9967 14.9146Z" fill="white"/>
+              <circle cx="16.5" cy="16.5" r="16" stroke="#222222"/>
+            </svg>
+          </a>
+          <a href="https://www.instagram.com/project2_official/" target="_blank">
+            <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M13.5217 10.587C12.177 10.587 11.087 11.677 11.087 13.0217V19.9783C11.087 21.323 12.177 22.413 13.5217 22.413H20.4783C21.823 22.413 22.913 21.323 22.913 19.9783V13.0217C22.913 11.677 21.823 10.587 20.4783 10.587H13.5217ZM9 13.0217C9 10.5245 11.0245 8.5 13.5217 8.5H20.4783C22.9755 8.5 25 10.5245 25 13.0217V19.9783C25 22.4755 22.9755 24.5 20.4783 24.5H13.5217C11.0245 24.5 9 22.4755 9 19.9783V13.0217Z" fill="#222222"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M17.2843 14.7493C16.9225 14.6957 16.5529 14.7575 16.2282 14.926C15.9035 15.0944 15.6402 15.361 15.4758 15.6878C15.3113 16.0145 15.2541 16.3848 15.3122 16.7459C15.3703 17.1071 15.5408 17.4407 15.7995 17.6994C16.0581 17.9581 16.3918 18.1286 16.7529 18.1867C17.1141 18.2448 17.4844 18.1876 17.8111 18.0231C18.1379 17.8586 18.4044 17.5953 18.5729 17.2706C18.7414 16.9459 18.8032 16.5764 18.7495 16.2145C18.6948 15.8454 18.5228 15.5037 18.259 15.2399C17.9951 14.9761 17.6534 14.8041 17.2843 14.7493ZM15.267 13.0735C15.9814 12.7029 16.7944 12.5669 17.5904 12.6849C18.4025 12.8054 19.1542 13.1837 19.7347 13.7642C20.3151 14.3447 20.6935 15.0964 20.8139 15.9084C20.932 16.7045 20.796 17.5175 20.4253 18.2318C20.0547 18.9462 19.4682 19.5254 18.7494 19.8872C18.0305 20.2491 17.2159 20.375 16.4214 20.2471C15.6268 20.1193 14.8928 19.7442 14.3238 19.1751C13.7547 18.606 13.3796 17.872 13.2517 17.0775C13.1239 16.283 13.2498 15.4683 13.6116 14.7495C13.9734 14.0306 14.5527 13.4442 15.267 13.0735Z" fill="#222222"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M19.7812 12.6743C19.7812 12.098 20.2484 11.6309 20.8247 11.6309H20.8311C21.4074 11.6309 21.8746 12.098 21.8746 12.6743C21.8746 13.2506 21.4074 13.7178 20.8311 13.7178H20.8247C20.2484 13.7178 19.7812 13.2506 19.7812 12.6743Z" fill="#222222"/>
+              <circle cx="16.5" cy="16.5" r="16" stroke="#222222"/>
+            </svg>
+          </a>
+          <a href="https://twitter.com/_Project2_" target="_blank">
+            <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M23.7127 10.5067C23.0723 10.9585 22.3632 11.304 21.6128 11.5299C21.21 11.0668 20.6747 10.7386 20.0794 10.5896C19.484 10.4406 18.8572 10.4781 18.2838 10.697C17.7104 10.9158 17.218 11.3055 16.8733 11.8133C16.5286 12.3211 16.3481 12.9225 16.3563 13.5362V14.205C15.1811 14.2354 14.0165 13.9748 12.9664 13.4462C11.9163 12.9177 11.0132 12.1376 10.3375 11.1755C10.3375 11.1755 7.66248 17.1943 13.6813 19.8694C12.304 20.8043 10.6633 21.273 9 21.2069C15.0188 24.5507 22.3752 21.2069 22.3752 13.5161C22.3746 13.3299 22.3567 13.144 22.3217 12.9611C23.0042 12.288 23.4859 11.4381 23.7127 10.5067Z" fill="#222222"/>
+              <circle cx="16.5" cy="16.5" r="16" stroke="#222222"/>
+            </svg>
+          </a>
+          <a href="https://www.tiktok.com/@project2_official" target="_blank">
+            <svg width="33" height="33" viewBox="0 0 33 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M23.8667 12.2333C21.8048 12.2333 20.1333 10.5618 20.1333 8.5H17.4667V19.4333C17.4667 20.7588 16.3922 21.8333 15.0666 21.8333C13.7412 21.8333 12.6667 20.7588 12.6667 19.4333C12.6667 18.1079 13.7412 17.0333 15.0666 17.0333V14.3667C12.2685 14.3667 10 16.6351 10 19.4333C10 22.2316 12.2685 24.5 15.0666 24.5C17.865 24.5 20.1333 22.2316 20.1333 19.4333V13.6985C21.1842 14.4545 22.4733 14.9 23.8667 14.9V12.2333Z" fill="#222222"/>
+              <circle cx="16.5" cy="16.5" r="16" stroke="#222222"/>
+            </svg>
+          </a>
+        </div>
+        <form
+          method="post"
+          action="/contact#footer-newsletter"
+          id="footer-newsletter"
+          accept-charset="UTF-8"
+          class="ArticleFollowForm"
+        >
+          <input type="hidden" name="form_type" value="customer"><input type="hidden" name="utf8" value="✓"
+          ><input type="hidden" name="contact[tags]" value="newsletter">
+          <input
+            type="email"
+            name="contact[email]"
+            class="ArticleFollowInput"
+            aria-label="メールアドレス"
+            placeholder="メールアドレスを入力してニュースレターを受け取る"
+            required=""
+          >
+          <button type="submit" class="ArticleFollowSubmit">
+            <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="16" cy="16" r="15.5" stroke="#222222"/>
+              <g clip-path="url(#clip0_2260_18467)">
+              <path d="M24.5319 16H13.2181" stroke="#222222" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M24.5313 15.9999L10.6463 22.6853L13.2176 15.9999L10.6463 9.31454L24.5313 15.9999Z" stroke="#222222" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+              <defs>
+              <clipPath id="clip0_2260_18467">
+              <rect width="17.4545" height="17.4545" fill="white" transform="translate(15.2734 3.65771) rotate(45)"/>
+              </clipPath>
+              </defs>
+            </svg>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</article>
+
+{% schema %}
+{
+  "name": "Blog post page",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_article_image",
+      "label": "Show article image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show article date",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_category",
+      "label": "Show article category",
+      "info": "The first article's tag is used as the main category.",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_author",
+      "label": "Show author",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_share_buttons",
+      "label": "Show share buttons",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_prev_next",
+      "label": "Show prev/next articles",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

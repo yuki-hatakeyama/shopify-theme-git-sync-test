@@ -1,0 +1,305 @@
+{%- assign share_url = shop.url | append: article.url -%}
+{%- assign twitter_text = article.title -%}
+{%- assign pinterest_description = article.description | strip_html | truncatewords: 15 | url_param_escape -%}
+{%- assign pinterest_image = article.image | img_url: '750x' | prepend: 'https:' -%}
+
+<article class="Article" data-section-id="{{ section.id }}" data-section-type="article">
+  <aside class="ArticleToolbar hidden-phone">
+    <div class="ArticleToolbar__Left">
+      <span class="Heading Text--subdued u-h8 hidden-tablet">{{ 'blog.article.now_reading' | t }}</span>
+      <span class="ArticleToolbar__ArticleTitle Heading u-h7">{{ article.title }}</span>
+    </div>
+
+    <div class="ArticleToolbar__Right">
+      {%- if blog.next_article or blog.previous_article -%}
+        <div class="ArticleToolbar__Nav">
+          {%- if blog.next_article -%}
+            <a
+              href="{{ blog.next_article }}"
+              class="ArticleToolbar__NavItem ArticleToolbar__NavItem--next Heading Text--subdued Link u-h8"
+            >
+              {%- render 'icon' with 'select-arrow-left' %}
+              {{ 'blog.article.previous' | t -}}
+            </a>
+          {%- endif -%}
+
+          {%- if blog.previous_article and blog.next_article -%}
+            <span class="ArticleToolbar__NavItemSeparator"></span>
+          {%- endif -%}
+
+          {%- if blog.previous_article -%}
+            <a
+              href="{{ blog.previous_article }}"
+              class="ArticleToolbar__NavItem ArticleToolbar__NavItem--prev Heading Text--subdued Link u-h8"
+            >
+              {{- 'blog.article.next' | t }}
+              {% render 'icon' with 'select-arrow-right' -%}
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </aside>
+
+  <div class="Article__Wrapper">
+    <div class="Article__Content">
+      <header class="Article__Header">
+        <h1 class="Article__Title">{{ article.title }}</h1>
+
+        {%- capture article_meta -%}
+          {%- if section.settings.show_date -%}
+            <span class="Article__MetaItem">{{ article.published_at | date: '%Y.%m.%d' }}</span>
+          {%- endif -%}
+
+          {%- if article.tags != empty -%}
+            <span class="Article__MetaItem">{{ article.tags.first }}</span>
+          {%- endif -%}
+        {%- endcapture -%}
+
+        {%- if article_meta != blank -%}
+          <div class="Article__Meta Heading Text--subdued u-h6">
+            {{- article_meta -}}
+          </div>
+        {%- endif -%}
+
+        <div class="share-buttons-wrapper">
+          {% render 'share-buttons', breakpoint: 768 %}
+        </div>
+      </header>
+
+      {%- if article.image and section.settings.show_article_image -%}
+        <div class="Article__ImageWrapper" style="background-image: url({{ article.image | img_url: '1x1' }})">
+          <div
+            class="Article__Image Image--lazyLoad Image--fadeIn"
+            data-optimumx="1.4"
+            data-bgset="{{ article.image | img_url: '400x' }} 400w, {{ article.image | img_url: '600x' }} 600w, {{ article.image | img_url: '800x' }} 800w, {{ article.image | img_url: '1200x' }} 1200w, {{ article.image | img_url: '1400x' }} 1400w, {{ article.image | img_url: '1600x' }} 1600w"
+          ></div>
+        </div>
+      {%- endif -%}
+
+      <div class="Article__Body Rte">
+        {{ article.content }}
+
+        <div class="share-buttons-wrapper">
+          {% render 'share-buttons', breakpoint: 768 %}
+        </div>
+      </div>
+
+      {%- if article_footer != blank -%}
+        <footer class="Article__Footer">
+          {{ article_footer }}
+        </footer>
+      {%- endif -%}
+      {%- if blog.next_article or blog.previous_article -%}
+        <div class="ArticleToolbar__Nav">
+          {%- if blog.previous_article -%}
+            <a
+              href="{{ blog.previous_article }}"
+              class="ArticleToolbar__NavItem ArticleToolbar__NavItem--prev Heading Text--subdued Link u-h8"
+            >
+              <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16.5 9.00012C16.5 4.85799 13.1421 1.50013 9 1.50013C4.85786 1.50013 1.5 4.85799 1.5 9.00012C1.5 13.1423 4.85786 16.5001 9 16.5001C13.1421 16.5001 16.5 13.1423 16.5 9.00012Z" stroke="#222" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M12.1808 8.99983L6.18635 8.99983" stroke="#222" stroke-linecap="square" stroke-linejoin="round"/>
+                <path d="M7.875 11.0566L5.81802 8.99966L7.875 6.94268" stroke="#222" stroke-linecap="square"/>
+              </svg>
+              <div>{{ blog.previous_article.title }}</div>
+            </a>
+          {%- endif -%}
+
+          {%- if blog.previous_article and blog.next_article -%}
+            <span class="ArticleToolbar__NavItemSeparator"></span>
+          {%- endif -%}
+
+          {%- if blog.next_article -%}
+            <a
+              href="{{ blog.next_article }}"
+              class="ArticleToolbar__NavItem ArticleToolbar__NavItem--next Heading Text--subdued Link u-h8"
+            >
+              <div>{{ blog.next_article.title }}</div>
+              <svg width="18" height="18" fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18">
+                <path d="M1.5 9a7.5 7.5 0 1 0 15 0 7.5 7.5 0 0 0-15 0Z" stroke="#222" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.819 9h5.994" stroke="#222" stroke-linecap="square" stroke-linejoin="round"/><path d="M10.125 6.943 12.182 9l-2.057 2.057" stroke="#222" stroke-linecap="square"/>
+              </svg>
+            </a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      <div class="ArticleBack">
+        {% if blog.handle == 'news' %}
+          <a class="ArticleBackWrapper" href="/blogs/news">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16.5 9.00012C16.5 4.85799 13.1421 1.50013 9 1.50013C4.85786 1.50013 1.5 4.85799 1.5 9.00012C1.5 13.1423 4.85786 16.5001 9 16.5001C13.1421 16.5001 16.5 13.1423 16.5 9.00012Z" stroke="#F03C01" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12.1808 8.99983L6.18635 8.99983" stroke="#F03C01" stroke-linecap="square" stroke-linejoin="round"/>
+              <path d="M7.875 11.0566L5.81802 8.99966L7.875 6.94268" stroke="#F03C01" stroke-linecap="square"/>
+            </svg>
+            <span>ニュース一覧へ戻る</span>
+          </a>
+        {% elsif blog.handle == 'magazine' %}
+          <a class="ArticleBackWrapper" href="/blogs/magazine">
+            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16.5 9.00012C16.5 4.85799 13.1421 1.50013 9 1.50013C4.85786 1.50013 1.5 4.85799 1.5 9.00012C1.5 13.1423 4.85786 16.5001 9 16.5001C13.1421 16.5001 16.5 13.1423 16.5 9.00012Z" stroke="#F03C01" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M12.1808 8.99983L6.18635 8.99983" stroke="#F03C01" stroke-linecap="square" stroke-linejoin="round"/>
+              <path d="M7.875 11.0566L5.81802 8.99966L7.875 6.94268" stroke="#F03C01" stroke-linecap="square"/>
+            </svg>
+            <span>マガジン一覧へ戻る</span>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+
+    <div class="Article__News">
+      {% if blog.handle == 'news' %}
+        <h3 class="Article__NewsHeading">その他のニュース</h3>
+        {% paginate blogs.news.articles by 5 %}
+          <!-- 表示する記事数を指定 -->
+          {% for article in blogs.news.articles %}
+            <a class="Article__NewsItem" href="{{ article.url }}">
+              <img class="Article__NewsItemImage" src="{{ article.image.src | img_url: 'master' }}" alt="">
+              <h3 class="Article__NewsItemTitle">{{ article.title }}</h3>
+            </a>
+          {% endfor %}
+        {% endpaginate %}
+      {% elsif blog.handle == 'magazine' %}
+        <h3 class="Article__NewsHeading">その他のマガジン</h3>
+        {% paginate blogs.magazine.articles by 5 %}
+          <!-- 表示する記事数を指定 -->
+          {% for article in blogs.magazine.articles %}
+            <a class="Article__NewsItem" href="{{ article.url }}">
+              <img class="Article__NewsItemImage" src="{{ article.image.src | img_url: 'master' }}" alt="">
+              <h3 class="Article__NewsItemTitle">{{ article.title }}</h3>
+            </a>
+          {% endfor %}
+        {% endpaginate %}
+      {% endif %}
+
+      {%- if blog.all_tags.size > 0 -%}
+        <div class="categories">
+          <div class="categories-title">
+            <p>Categories</p>
+            <span>カテゴリー</span>
+          </div>
+          <ul class="category-links">
+            {%- for tag in blog.all_tags -%}
+              <li class="category-links-item">
+                <a
+                  href="/blogs/{{ blog.handle }}/tagged/{{ tag | handle }}"
+                  class="category-links-anchor {% if current_tags contains tag %}is-active{% endif %}"
+                >
+                  {{- tag -}}
+                </a>
+              </li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+  <div class="ArticleBanner">
+    <a class="ArticleBannerWrapper" href="/collections/online-products">
+      <div class="ArticleBannerTitle">オンラインショップ</div>
+      <div class="ArticleBannerLinkWrapper">
+        <span class="ArticleBannerLinkText">2foodsの商品を探す</span>
+        <img class="ArticleBannerLinkIcon" src="{{ 'arrow-right-circle-white.svg' | asset_url }}" alt="リンク">
+      </div>
+      <img class="ArticleBannerBackImageSp" src="{{ 'onlineshop-banner-sp.png' | asset_url }}" alt="オンラインショップ">
+      <img class="ArticleBannerBackImagePc" src="{{ 'onlineshop-banner-pc.png' | asset_url }}" alt="オンラインショップ">
+    </a>
+  </div>
+</article>
+
+<style>
+  .Article__Title {
+    color: #222;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 125%; /* 30px */
+    letter-spacing: 0.96px;
+  }
+  .Article__Meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .Article__MetaItem {
+    font-size: 16px;
+  }
+  .Article__MetaItem + .Article__MetaItem:before {
+    display: none;
+  }
+  .Article__MetaItem + .Article__MetaItem {
+    font-size: 12px;
+    background: #222;
+    padding: 3px 5px;
+    color: #fff;
+    margin-top: -3px;
+  }
+  .share-buttons-wrapper {
+    margin: 32px 0 28px;
+  }
+  .share-buttons-wrapper .share-buttons a {
+    color: #fff;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+  }
+  .ArticleBackWrapper span {
+    color: #f03c01;
+  }
+  .ArticleBackWrapper path {
+    stroke: #f03c01;
+  }
+  .Article__NewsHeading {
+    padding-bottom: 8px;
+  }
+  .ArticleBanner {
+    margin-bottom: 60px;
+  }
+  .ArticleToolbar__NavItem {
+    color: #222;
+    font-size: 14px;
+    font-style: normal;
+    line-height: 175%; /* 24.5px */
+  }
+
+  @media screen and (min-width: 768px) {
+    .Article__Title {
+      font-size: 32px;
+      letter-spacing: 1.28px;
+    }
+    .share-buttons-wrapper {
+      margin: 48px 0 36px;
+    }
+    .share-buttons-wrapper .share-buttons {
+      justify-content: flex-start;
+    }
+
+    .ArticleBackWrapper:hover span {
+      color: #222;
+    }
+    .ArticleBackWrapper:hover path {
+      stroke: #222;
+    }
+    .ArticleBanner {
+      margin-bottom: 80px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Blog post page",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_article_image",
+      "label": "Show article image",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_date",
+      "label": "Show article date",
+      "default": true
+    }
+  ]
+}
+{% endschema %}
