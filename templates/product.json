@@ -10,6 +10,13 @@
             "subscription_label": "定期決済"
           }
         },
+        "55eacca7-245f-403c-9f85-f56b62959396": {
+          "type": "shopify:\/\/apps\/\/blocks\/app-block\/67cce3d8-a1e5-43f3-8d2d-0c320d8c46e7",
+          "settings": {
+            "onetime_purchase_label": "１回決済",
+            "subscription_label": "定期決済"
+          }
+        },
         "vendor": {
           "type": "text",
           "settings": {
@@ -74,6 +81,7 @@
       },
       "block_order": [
         "a13ce95f-151e-455a-b159-1c8f86ab08a8",
+        "55eacca7-245f-403c-9f85-f56b62959396",
         "vendor",
         "title",
         "price",
